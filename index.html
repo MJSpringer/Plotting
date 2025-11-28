@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en-US">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Generates spiral graph plots.">
+    <meta name="keywords" content="HTML, JavaScript, Bootstrap, Font Awesome">
+    <meta name="author" content="SpringTimeCode">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="media-src 'self' blob:;">
+    <title>SpiroJS - Animated Spiral Circle Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/js/all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/fontawesome.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="FAVICON.PNG">
+  </head>
+
+  <body class="bg-body">
+
+    <div class="container bg-body p-1">
+      <div class="row">
+        <div class="col-lg-12 p-1">
+          <div class="card">
+            <div class="card-header" style="height: 45px;">
+              <h5><img src="favicon.svg" width="25" height="25" class="d-inline-block align-top" alt="SpiroJS" style="border-radius: 15px;"> SpiroJS</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 p-1">
+          <div class="card">
+            <div class="card-header">
+              Plot Settings
+            </div>
+            <div class="card-body">
+              <div class="row p-3">
+                <div class="col-3 p-1">
+                  <label for="lineLengthRange" class="form-label">Line Length:</label>
+                </div>
+                <div class="col-9 p-1">
+                  <input type="range" class="form-range" min="0.01" max="3" step="0.001" id="lineLengthRange" value="0.15">
+                  <span id="lineLengthRangeValue" aria-hidden="true"></span>
+                </div>
+              </div>
+              <div class="row p-3">
+                <div class="col-3 p-1">
+                  <label for="saturationRange" class="form-label">Saturation Level:</label>
+                </div>
+                <div class="col-9 p-1">
+                  <input type="range" class="form-range" min="1" max="360" step="1" id="saturationRange" value="50">
+                  <span id="saturationRangeValue" aria-hidden="true"></span>
+                </div>
+              </div>
+              <div class="row p-3">
+                <div class="col-3 p-1">
+                  <label for="plotSizeRange" class="form-label">Plot Size:</label>
+                </div>
+                <div class="col-9 p-1">
+                  <input type="range" class="form-range" min="10" max="100" step="1" id="plotSizeRange" value="90">
+                  <span id="plotSizeRangeValue" aria-hidden="true"></span>
+                </div>
+              </div>
+              <div class="row p-3">
+                <div class="col-3 p-1">
+                  <label for="plotSpeedRange" class="form-label">Plot Speed:</label>
+                </div>
+                <div class="col-9 p-1">
+                  <input type="range" class="form-range" min="1" max="20" step="1" id="plotSpeedRange" value="15">
+                  <span id="plotSpeedRangeValue" aria-hidden="true"></span>
+                </div>
+              </div>
+              <div class="row p-3">
+                <div class="col-3 p-1">
+                  <label for="multiplierRange" class="form-label">Loop Multiplier:</label>
+                </div>
+                <div class="col-9 p-1">
+                  <input type="range" class="form-range" min="0" max="20" step="0.0001" id="multiplierRange" value="1.3">
+                  <span id="multiplierRangeValue" aria-hidden="true"></span>
+                </div>
+              </div>
+              <div class="row p-3">
+                <div class="col-12 p-1 text-center">
+                  <button id="backwardButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-caret-left fa-lg"></i></span></button>
+                  <button id="forwardButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-caret-right fa-lg"></i></span></button>
+                  <button id="stopButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-stop"></i></span> </button>
+                  <button id="themeToggleButton" class="col-2 btn btn-outline-primary text-nowrap"><span id="themeToggleIconLight" style="display: block"><i class="fa-classic fa-solid fa-sun"></i></span><span id="themeToggleIconDark" style="display: none"><i class="fa-classic fa-solid fa-moon"></i></span></button>
+                </div>
+                <div class="col-12 p-1 text-center">
+                  <button id="copyButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-copy"></i></span></button>
+                  <button id="imageButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-camera"></i></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 p-1">
+          <div class="card">
+            <div class="card-header">
+              Plot Canvas
+            </div>
+            <div class="card-body" id="canvasDiv" style="padding: 0px">
+              <canvas id="canvas" width="600" height="555"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">URL Copied!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="copyToastBody" style="white-space: pre;">
+          URL with plot settings copied to the clipboard.
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="imageToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Image Copied!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="imageToastBody" style="white-space: pre;">
+          Image copied to the clipboard.
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      // Collect initial objects
+      const rangeInput = document.getElementById('multiplierRange');
+      const rangeOutput = document.getElementById('multiplierRangeValue');
+
+      const saturationInput = document.getElementById('saturationRange');
+      const saturationOutput = document.getElementById('saturationRangeValue');
+
+      const lineLengthInput = document.getElementById('lineLengthRange');
+      const lineLengthOutput = document.getElementById('lineLengthRangeValue');
+
+      const plotSpeedInput = document.getElementById('plotSpeedRange');
+      const plotSpeedOutput = document.getElementById('plotSpeedRangeValue');
+
+      const plotSizeInput = document.getElementById('plotSizeRange');
+      const plotSizeOutput = document.getElementById('plotSizeRangeValue');
+
+      const btnForward = document.getElementById('forwardButton');
+      const btnBackward = document.getElementById('backwardButton');
+      const btnStop = document.getElementById('stopButton');
+      const btnCopy = document.getElementById('copyButton');
+      const btnImage = document.getElementById('imageButton');
+
+      const btnToggleTheme = document.getElementById('themeToggleButton');
+      const spanToggleThemeLight = document.getElementById('themeToggleIconLight');
+      const spanToggleThemeDark = document.getElementById('themeToggleIconDark');
+      
+      const parentDiv = document.getElementById('canvasDiv');
+      const canvas = document.getElementById("canvas");
+
+      const copyToastDiv = document.getElementById('copyToast');
+      const copyToast = new bootstrap.Toast(copyToastDiv, { autohide: true, delay: 4000 });
+      const copyToastOutput = document.getElementById('copyToastBody');
+
+      const imageToastDiv = document.getElementById('imageToast');
+      const imageToast = new bootstrap.Toast(imageToastDiv, { autohide: true, delay: 4000 });
+      const imageToastOutput = document.getElementById('imageToastBody');
+
+      // Set initial canvas settings
+      canvas.width = parentDiv.offsetWidth - 4;
+      canvas.height = parentDiv.offsetWidth * 0.945;
+      let strColorStroke = "#000000";
+
+      // Set initial values
+      let isLoopRunning = false;
+      let loopInterval;
+      let loopDirection = "Forward";
+
+      // Get url and query string
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const siteFullURL = window.location.href;
+      const siteBaseURL = siteFullURL.split(/[?#]/)[0];
+
+      // Set initial loop multiplier value
+      let dblMultiplier = 1.3;
+      if (urlParams.has('Multiplier')) {
+        let tempValue = urlParams.get('Multiplier');
+        if (!isNaN(tempValue)) {
+          if (tempValue >= 0 &&  tempValue <=20) {dblMultiplier = parseFloat(tempValue)}
+        } 
+      }
+      let dblMultiplierFormatted = parseFloat(dblMultiplier).toFixed(4);
+      rangeInput.value = dblMultiplier;
+      rangeOutput.textContent = 'Loop Multiplier: ' + dblMultiplierFormatted;
+
+      // Set initial saturation level value
+      let dblSaturation = 50;
+      if (urlParams.has('Saturation')) {
+        let tempValue = urlParams.get('Saturation');
+        if (!isNaN(tempValue)) {
+          if (tempValue >= 1 &&  tempValue <=360) {dblSaturation = parseFloat(tempValue)}
+        } 
+      }
+      saturationInput.value = dblSaturation;
+      saturationOutput.textContent = 'Saturation Level: ' + saturationInput.value;
+
+      // Set initial line length value
+      let dblLineLength = 0.15;
+      if (urlParams.has('LineLength')) {
+        let tempValue = urlParams.get('LineLength');
+        if (!isNaN(tempValue)) {
+          if (tempValue >= 0.01 &&  tempValue <=3) {dblLineLength = parseFloat(tempValue)}
+        } 
+      }
+      let dblLineLengthFormatted = parseFloat(dblLineLength).toFixed(3);
+      lineLengthInput.value = dblLineLengthFormatted;
+      lineLengthOutput.textContent = 'Line Length: ' + dblLineLengthFormatted;
+
+      // Set initial plot speed value
+      let dblPlotSpeed = 15;
+      if (urlParams.has('PlotSpeed')) {
+        let tempValue = urlParams.get('PlotSpeed');
+        if (!isNaN(tempValue)) {
+          if (tempValue >= 1 &&  tempValue <=20) {dblPlotSpeed = parseFloat(tempValue)}
+        } 
+      }
+      plotSpeedInput.value = dblPlotSpeed;
+      plotSpeedOutput.textContent = 'Plot Speed: ' + plotSpeedInput.value;
+
+       // Set initial plot size value
+      let dblPlotSize = 100;
+      if (urlParams.has('PlotSize')) {
+        let tempValue = urlParams.get('PlotSize');
+        if (!isNaN(tempValue)) {
+          if (tempValue >= 10 &&  tempValue <=100) {dblPlotSize = parseFloat(tempValue)}
+        } 
+      }
+      plotSizeInput.value = dblPlotSize;
+      plotSizeOutput.textContent = 'Plot Size: ' + plotSizeInput.value;
+
+      // Set initial theme based on system preference
+      let strThemePreference = "light";
+
+      if (urlParams.has('Theme')) {
+        let tempValue = urlParams.get('Theme').toLowerCase();
+        if (tempValue === "light") {
+          document.documentElement.setAttribute('data-bs-theme', 'light');
+          spanToggleThemeLight.style.display = 'block';
+          spanToggleThemeDark.style.display = 'none';
+          strColorStroke = "#000000";
+          strThemePreference = "light";
+        } else {
+          document.documentElement.setAttribute('data-bs-theme', 'dark');
+          spanToggleThemeLight.style.display = 'none';
+          spanToggleThemeDark.style.display = 'block';
+          strColorStroke = "#FFFFFF";
+          strThemePreference = "dark";
+        }
+      };
+
+      // Add loop multiplier listener
+      rangeInput.addEventListener('input', function() {
+        rangeOutput.textContent = 'Loop Multiplier: ' + parseFloat(this.value).toFixed(4);
+        if (isLoopRunning) {
+          loopCycle();
+        } else {
+          let dblMultiplier = parseFloat(this.value);
+          let dblSaturation = parseFloat(saturationInput.value);
+          let dblLineLength = parseFloat(lineLengthInput.value);
+          let dblPlotSize = parseFloat(plotSizeInput.value);
+          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+        }
+      });
+
+      // Add saturation level listener
+      saturationInput.addEventListener('input', function() {
+        saturationOutput.textContent = 'Saturation Level: ' + this.value;
+        if (isLoopRunning) {
+          loopCycle();
+        } else {
+          let dblMultiplier = parseFloat(rangeInput.value);
+          let dblSaturation = parseFloat(this.value);
+          let dblLineLength = parseFloat(lineLengthInput.value);
+          let dblPlotSize = parseFloat(plotSizeInput.value);
+          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+        }
+      });
+
+      // Add line length listener
+      lineLengthInput.addEventListener('input', function() {
+        lineLengthOutput.textContent = 'Line Length: ' + parseFloat(this.value).toFixed(3);
+        if (isLoopRunning) {
+          loopCycle();
+        } else {
+          let dblMultiplier = parseFloat(rangeInput.value);
+          let dblSaturation = parseFloat(saturationInput.value);
+          let dblLineLength = parseFloat(this.value);
+          let dblPlotSize = parseFloat(plotSizeInput.value);
+          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+        }
+      });
+
+      // Add plot size listener
+      plotSizeInput.addEventListener('input', function() {
+        plotSizeOutput.textContent = 'Plot Size: ' + parseFloat(this.value).toFixed(0);
+        if (isLoopRunning) {
+          loopCycle();
+        } else {
+          let dblMultiplier = parseFloat(rangeInput.value);
+          let dblSaturation = parseFloat(saturationInput.value);
+          let dblLineLength = parseFloat(lineLengthInput.value);
+          let dblPlotSize = parseFloat(this.value);
+          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+        }
+      });
+
+      // Add plot speed listener
+      plotSpeedInput.addEventListener('input', function() {
+        plotSpeedOutput.textContent = 'Plot Speed: ' + this.value;
+        if (isLoopRunning) {
+          loopCycle();
+        }
+      });
+
+      // Define actions when forward button clicked
+      btnForward.addEventListener('click', () => {
+        if (isLoopRunning && loopDirection == "Forward") {
+          btnForward.classList.remove('active');
+          btnBackward.classList.remove('active');
+          btnStop.classList.remove('active');
+          clearInterval(loopInterval);
+          isLoopRunning = false;
+        } else {
+          btnForward.classList.add('active');
+          btnBackward.classList.remove('active');
+          btnStop.classList.remove('active');
+          loopDirection = "Forward";
+          loopCycle();
+        }
+      });
+
+      // Define actions when backward button clicked
+      btnBackward.addEventListener('click', () => {
+        if (isLoopRunning && loopDirection == "Backward") {
+          btnForward.classList.remove('active');
+          btnBackward.classList.remove('active');
+          btnStop.classList.remove('active');
+          clearInterval(loopInterval);
+          isLoopRunning = false;
+        } else {      
+          btnForward.classList.remove('active');
+          btnBackward.classList.add('active');
+          btnStop.classList.remove('active');
+          loopDirection = "Backward";
+          loopCycle();
+        }
+      });
+
+      // Define actions when stop button clicked
+      btnStop.addEventListener('click', () => {
+        btnForward.classList.remove('active');
+        btnBackward.classList.remove('active');
+        btnStop.classList.remove('active');
+        if (isLoopRunning) {
+          clearInterval(loopInterval);
+          isLoopRunning = false;
+        }
+      });
+
+      // Define actions when copy button clicked
+      btnCopy.addEventListener('click', async () => {
+
+        let dblMultiplier = parseFloat(rangeInput.value);
+        let dblSaturation = parseFloat(saturationInput.value);
+        let dblLineLength = parseFloat(lineLengthInput.value);
+        let dblPlotSpeed = parseFloat(plotSpeedInput.value);
+        let dblPlotSize = parseFloat(plotSizeInput.value);
+
+        let shareURL = siteBaseURL + "?Multiplier=" + encodeURIComponent(dblMultiplier) +
+          "&Saturation=" + encodeURIComponent(dblSaturation) + "&LineLength=" + encodeURIComponent(dblLineLength) +
+          "&PlotSpeed=" + encodeURIComponent(dblPlotSpeed) + "&PlotSize=" + encodeURIComponent(dblPlotSize) +
+          "&Theme=" + encodeURIComponent(strThemePreference);
+
+        let shareDescription = "URL with plot settings copied to the clipboard:\n" +
+          "Loop Multiplier: " + dblMultiplier + "\n" +
+          "Saturation Level: " + dblSaturation + "\n" +
+          "Line Length: " + dblLineLength + "\n" +
+          "Plot Speed: " + dblPlotSpeed + "\n" +
+          "Plot Size: " + dblPlotSize + "\n" +
+          "Theme: " + strThemePreference;
+
+        try {
+          await navigator.clipboard.writeText(shareURL);
+        } catch (err) {
+          console.error('Failed to copy url and plot settings: ', err);
+        }
+
+        copyToastOutput.textContent = shareDescription;
+        copyToast.show();
+
+      });
+
+      // Define actions when image button clicked
+      btnImage.addEventListener('click', async () => {
+        try {
+          const blob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/png');
+          });
+          const clipboardItem = new ClipboardItem({ [blob.type]: blob });
+          await navigator.clipboard.write([clipboardItem]);
+        } catch (error) {
+          console.error('Failed to copy canvas image:', error);
+        }
+        imageToastOutput.textContent = "Image copied to the clipboard.";
+        imageToast.show();
+      });
+
+      // Add window resize listener
+      window.addEventListener('resize', function() {
+        canvas.width = parentDiv.offsetWidth - 4;
+        canvas.height = parentDiv.offsetWidth * 0.945;
+        if (isLoopRunning) {
+          loopCycle();
+        } else {
+          let dblMultiplier = parseFloat(rangeInput.value);
+          let dblSaturation = parseFloat(saturationInput.value);
+          let dblLineLength = parseFloat(lineLengthInput.value);
+          let dblPlotSize = parseFloat(plotSizeInput.value);
+          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+        }
+      });
+
+      // Draw initial chart on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        let dblMultiplier = parseFloat(rangeInput.value);
+        let dblSaturation = parseFloat(saturationInput.value);
+        let dblLineLength = parseFloat(lineLengthInput.value);
+        let dblPlotSize = parseFloat(plotSizeInput.value);
+        draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+      });
+
+      // Toggle between light and dark themes
+      btnToggleTheme.addEventListener('click', () => {
+        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+          document.documentElement.setAttribute('data-bs-theme', 'light');
+          spanToggleThemeLight.style.display = 'block';
+          spanToggleThemeDark.style.display = 'none';
+          strColorStroke = "#000000";
+          strThemePreference = "light";
+        } else {
+          document.documentElement.setAttribute('data-bs-theme', 'dark');
+          spanToggleThemeLight.style.display = 'none';
+          spanToggleThemeDark.style.display = 'block';
+          strColorStroke = "#FFFFFF";
+          strThemePreference = "dark";
+        }
+        let dblMultiplier = parseFloat(rangeInput.value);
+        let dblSaturation = parseFloat(saturationInput.value);
+        let dblLineLength = parseFloat(lineLengthInput.value);
+        let dblPlotSize = parseFloat(plotSizeInput.value);
+        draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+      });
+
+      // Define function to cycle through chart plots
+      function loopCycle() {
+
+        if (isLoopRunning) {
+
+          clearInterval(loopInterval);
+          isLoopRunning = false;
+
+        }
+
+        if (!isLoopRunning) {
+          
+          isLoopRunning = true;
+          let count = 0;
+
+          let dblIncrement;
+          if (loopDirection == "Forward") { 
+            dblIncrement = 0.0001;
+          } else {
+            dblIncrement = -0.0001;
+          }
+
+          let dblMultiplier = parseFloat(rangeInput.value);
+          let dblSaturation = parseFloat(saturationInput.value);
+          let dblLineLength = parseFloat(lineLengthInput.value);
+          let dblPlotSpeed = 20 - parseFloat(plotSpeedInput.value);
+          let dblPlotSize = parseFloat(plotSizeInput.value);
+
+          loopInterval = setInterval(() => {
+
+            dblMultiplier = dblMultiplier + dblIncrement;
+
+            if (loopDirection == 'Forward') { 
+              if (dblMultiplier > 20) {dblMultiplier = 0};
+            } else {
+              if (dblMultiplier <= 0) {dblMultiplier = 20};
+            }
+
+            let dblMultiplierFormatted = dblMultiplier.toFixed(4);
+            rangeInput.value = dblMultiplierFormatted;
+            rangeOutput.textContent = 'Loop Multiplier: ' + dblMultiplierFormatted;
+
+            draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+
+          }, Math.max(dblPlotSpeed, 1));
+
+        }
+
+      };
+
+      /**
+        * Draws the spiral plot on the canvas.
+        * @param {number} dblMultiplier - The loop multiplier affecting the spiral's shape.
+        * @param {number} dblSaturation - The maximum saturation/angle for plotting.
+        * @param {number} dblLineLength - The step size for each line segment.
+        * @param {number} dblPlotSize - The size of the plot within the canvas.
+        * @param {string} strColorStroke - The stroke color for the plot lines.
+      */
+      function draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke) {
+
+        if (canvas.getContext) {
+
+          const plotArea = canvas.getContext("2d");
+          const plotAreaWidth = canvas.width;
+          const plotAreaHeight = canvas.height;
+
+          const radiusScale = plotAreaWidth * 0.925 * (dblPlotSize / 100);
+          const plotAreaCenter = (plotAreaWidth/2);
+
+          plotArea.clearRect(0, 0, plotAreaWidth, plotAreaHeight);
+          plotArea.strokeStyle = strColorStroke;
+          let x1 = 0;
+          let y1 = 0;
+          let dblRadius, x2, y2;
+
+          for (let dblSaturationCurrent = dblLineLength; dblSaturationCurrent <= dblSaturation; 
+            dblSaturationCurrent = dblSaturationCurrent + dblLineLength) {
+
+            dblRadius = radiusScale * Math.cos(dblMultiplier*dblSaturationCurrent);
+            x2 = (((dblRadius * Math.sin(dblSaturationCurrent))/Math.PI)*1.55) + plotAreaCenter;
+            y2 = ((dblRadius * Math.cos(dblSaturationCurrent))/2) + (plotAreaCenter*0.95);
+
+            if (x1 == 0) {
+              x1 = x2;
+              y1 = y2;
+            };
+      
+            plotArea.beginPath();  
+            plotArea.moveTo(x1,y1);
+            plotArea.lineTo(x2,y2);
+            plotArea.stroke();
+            plotArea.closePath();
+
+            x1=x2;
+            y1=y2;
+
+          }
+
+        }
+
+      };
+
+      // Original Commodore 64 Code from 1982 (required SuperExpander Cartridge)
+      // 1 graphic 2 : b = 0.1
+      // 10 c = 511 : d = 511
+      // 20 for a=0 to 1000 step b
+      // 30 r = 100 * cos (4*a)
+      // 40 x = (r * sin(a))/3.14
+      // 50 y = (r * cos(a))/2
+      // 60 get a$ : if a$ > "" then 110
+      // 70 x = x + 511 : y = y + 511
+      // 80 draw 1,c,d to x,y
+      // 90 d = y : c = x
+      // 100 next a
+      // 110 a = 1000
+      // 120 b = b + .1
+      // 130 scnclr
+      // 140 goto 10
+
+      // Loop Multiplier Notes:
+      // 0 = full circle
+      // 1 = one loop
+      // 2 = 4 loops
+      // 3 = 3 loops
+      // 4 = 8 loops
+      // etc
+
+    </script>
+  </body>
+</html>
