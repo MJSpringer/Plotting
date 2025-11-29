@@ -1,599 +1,484 @@
 <!doctype html>
 <html lang="en-US">
 
-  <head>
-    <meta charset="utf-8" />
-    <meta name="description" content="Generates spiral graph plots.">
-    <meta name="keywords" content="HTML, JavaScript, Bootstrap, Font Awesome">
-    <meta name="author" content="SpringTimeCode">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="media-src 'self' blob:;">
-    <title>SpiroJS - Animated Spiral Circle Graphs</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/js/all.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/fontawesome.min.css" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="32x32" href="FAVICON.PNG">
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Generates spiral graph plots.">
+  <meta name="keywords" content="HTML, JavaScript, Bootstrap, Font Awesome">
+  <meta name="author" content="SpringTimeCode">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="media-src 'self' blob:;">
+  <title>SpiroJS - Animated Spiral Circle Graphs</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="FAVICON.PNG">
+</head>
 
-  <body class="bg-body">
+<body class="bg-body">
 
-    <div class="container bg-body p-1">
-      <div class="row">
-        <div class="col-lg-12 p-1">
-          <div class="card">
-            <div class="card-header" style="height: 45px;">
-              <h5><img src="favicon.svg" width="25" height="25" class="d-inline-block align-top" alt="SpiroJS" style="border-radius: 15px;"> SpiroJS</h5>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-6 p-1">
-          <div class="card">
-            <div class="card-header">
-              Plot Settings
-            </div>
-            <div class="card-body">
-              <div class="row p-3">
-                <div class="col-3 p-1">
-                  <label for="lineLengthRange" class="form-label">Line Length:</label>
-                </div>
-                <div class="col-9 p-1">
-                  <input type="range" class="form-range" min="0.01" max="3" step="0.001" id="lineLengthRange" value="0.15">
-                  <span id="lineLengthRangeValue" aria-hidden="true"></span>
-                </div>
-              </div>
-              <div class="row p-3">
-                <div class="col-3 p-1">
-                  <label for="saturationRange" class="form-label">Saturation Level:</label>
-                </div>
-                <div class="col-9 p-1">
-                  <input type="range" class="form-range" min="1" max="360" step="1" id="saturationRange" value="50">
-                  <span id="saturationRangeValue" aria-hidden="true"></span>
-                </div>
-              </div>
-              <div class="row p-3">
-                <div class="col-3 p-1">
-                  <label for="plotSizeRange" class="form-label">Plot Size:</label>
-                </div>
-                <div class="col-9 p-1">
-                  <input type="range" class="form-range" min="10" max="100" step="1" id="plotSizeRange" value="90">
-                  <span id="plotSizeRangeValue" aria-hidden="true"></span>
-                </div>
-              </div>
-              <div class="row p-3">
-                <div class="col-3 p-1">
-                  <label for="plotSpeedRange" class="form-label">Plot Speed:</label>
-                </div>
-                <div class="col-9 p-1">
-                  <input type="range" class="form-range" min="1" max="20" step="1" id="plotSpeedRange" value="15">
-                  <span id="plotSpeedRangeValue" aria-hidden="true"></span>
-                </div>
-              </div>
-              <div class="row p-3">
-                <div class="col-3 p-1">
-                  <label for="multiplierRange" class="form-label">Loop Multiplier:</label>
-                </div>
-                <div class="col-9 p-1">
-                  <input type="range" class="form-range" min="0" max="20" step="0.0001" id="multiplierRange" value="1.3">
-                  <span id="multiplierRangeValue" aria-hidden="true"></span>
-                </div>
-              </div>
-              <div class="row p-3">
-                <div class="col-12 p-1 text-center">
-                  <button id="backwardButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-caret-left fa-lg"></i></span></button>
-                  <button id="forwardButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-caret-right fa-lg"></i></span></button>
-                  <button id="stopButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-stop"></i></span> </button>
-                  <button id="themeToggleButton" class="col-2 btn btn-outline-primary text-nowrap"><span id="themeToggleIconLight" style="display: block"><i class="fa-classic fa-solid fa-sun"></i></span><span id="themeToggleIconDark" style="display: none"><i class="fa-classic fa-solid fa-moon"></i></span></button>
-                </div>
-                <div class="col-12 p-1 text-center">
-                  <button id="copyButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-copy"></i></span></button>
-                  <button id="imageButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i class="fa-classic fa-solid fa-camera"></i></span></button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6 p-1">
-          <div class="card">
-            <div class="card-header">
-              Plot Canvas
-            </div>
-            <div class="card-body" id="canvasDiv" style="padding: 0px">
-              <canvas id="canvas" width="600" height="555"></canvas>
-            </div>
+  <div class="container bg-body p-1">
+    <div class="row">
+      <div class="col-lg-12 p-1">
+        <div class="card">
+          <div class="card-header" style="height: 45px;">
+            <h5><img src="favicon.svg" width="25" height="25" class="d-inline-block align-top" alt="SpiroJS"
+                style="border-radius: 15px;"> SpiroJS</h5>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-      <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <strong class="me-auto">URL Copied!</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div class="row">
+      <div class="col-lg-6 p-1">
+        <div class="card">
+          <div class="card-header">
+            Plot Settings
+          </div>
+          <div class="card-body">
+            <div class="row p-3">
+              <div class="col-3 p-1">
+                <label for="lineLengthRange" class="form-label">Line Length:</label>
+              </div>
+              <div class="col-9 p-1">
+                <input type="range" class="form-range" min="0.01" max="3" step="0.001" id="lineLengthRange"
+                  value="0.15">
+                <span id="lineLengthRangeValue" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="row p-3">
+              <div class="col-3 p-1">
+                <label for="saturationRange" class="form-label">Saturation Level:</label>
+              </div>
+              <div class="col-9 p-1">
+                <input type="range" class="form-range" min="1" max="360" step="1" id="saturationRange" value="50">
+                <span id="saturationRangeValue" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="row p-3">
+              <div class="col-3 p-1">
+                <label for="plotSizeRange" class="form-label">Plot Size:</label>
+              </div>
+              <div class="col-9 p-1">
+                <input type="range" class="form-range" min="10" max="100" step="1" id="plotSizeRange" value="90">
+                <span id="plotSizeRangeValue" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="row p-3">
+              <div class="col-3 p-1">
+                <label for="plotSpeedRange" class="form-label">Plot Speed:</label>
+              </div>
+              <div class="col-9 p-1">
+                <input type="range" class="form-range" min="1" max="20" step="1" id="plotSpeedRange" value="15">
+                <span id="plotSpeedRangeValue" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="row p-3">
+              <div class="col-3 p-1">
+                <label for="multiplierRange" class="form-label">Loop Multiplier:</label>
+              </div>
+              <div class="col-9 p-1">
+                <input type="range" class="form-range" min="0" max="20" step="0.0001" id="multiplierRange" value="1.3">
+                <span id="multiplierRangeValue" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="row p-3">
+              <div class="col-12 p-1 text-center">
+                <button id="backwardButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i
+                      class="fa-classic fa-solid fa-caret-left fa-lg"></i></span></button>
+                <button id="forwardButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i
+                      class="fa-classic fa-solid fa-caret-right fa-lg"></i></span></button>
+                <button id="stopButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i
+                      class="fa-classic fa-solid fa-stop"></i></span> </button>
+                <button id="themeToggleButton" class="col-2 btn btn-outline-primary text-nowrap"><span
+                    id="themeToggleIconLight" style="display: block"><i
+                      class="fa-classic fa-solid fa-sun"></i></span><span id="themeToggleIconDark"
+                    style="display: none"><i class="fa-classic fa-solid fa-moon"></i></span></button>
+              </div>
+              <div class="col-12 p-1 text-center">
+                <button id="copyButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i
+                      class="fa-classic fa-solid fa-copy"></i></span></button>
+                <button id="imageButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i
+                      class="fa-classic fa-solid fa-camera"></i></span></button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="toast-body" id="copyToastBody" style="white-space: pre;">
-          URL with plot settings copied to the clipboard.
+      </div>
+      <div class="col-lg-6 p-1">
+        <div class="card">
+          <div class="card-header">
+            Plot Canvas
+          </div>
+          <div class="card-body" id="canvasDiv" style="padding: 0px">
+            <canvas id="canvas" width="600" height="555"></canvas>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-      <div id="imageToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <strong class="me-auto">Image Copied!</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body" id="imageToastBody" style="white-space: pre;">
-          Image copied to the clipboard.
-        </div>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">URL Copied!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" id="copyToastBody" style="white-space: pre;">
+        URL with plot settings copied to the clipboard.
       </div>
     </div>
+  </div>
 
-    <script>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="imageToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Image Copied!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" id="imageToastBody" style="white-space: pre;">
+        Image copied to the clipboard.
+      </div>
+    </div>
+  </div>
 
-      // Collect initial objects
-      const rangeInput = document.getElementById('multiplierRange');
-      const rangeOutput = document.getElementById('multiplierRangeValue');
+  <script>
+    class SpiroGraph {
+      constructor() {
+        // UI Elements
+        this.ui = {
+          multiplier: { input: document.getElementById('multiplierRange'), output: document.getElementById('multiplierRangeValue') },
+          saturation: { input: document.getElementById('saturationRange'), output: document.getElementById('saturationRangeValue') },
+          lineLength: { input: document.getElementById('lineLengthRange'), output: document.getElementById('lineLengthRangeValue') },
+          plotSpeed: { input: document.getElementById('plotSpeedRange'), output: document.getElementById('plotSpeedRangeValue') },
+          plotSize: { input: document.getElementById('plotSizeRange'), output: document.getElementById('plotSizeRangeValue') },
+          buttons: {
+            forward: document.getElementById('forwardButton'),
+            backward: document.getElementById('backwardButton'),
+            stop: document.getElementById('stopButton'),
+            copy: document.getElementById('copyButton'),
+            image: document.getElementById('imageButton'),
+            theme: document.getElementById('themeToggleButton')
+          },
+          themeIcons: {
+            light: document.getElementById('themeToggleIconLight'),
+            dark: document.getElementById('themeToggleIconDark')
+          },
+          canvasDiv: document.getElementById('canvasDiv'),
+          canvas: document.getElementById("canvas"),
+          toasts: {
+            copy: new bootstrap.Toast(document.getElementById('copyToast'), { autohide: true, delay: 4000 }),
+            copyBody: document.getElementById('copyToastBody'),
+            image: new bootstrap.Toast(document.getElementById('imageToast'), { autohide: true, delay: 4000 }),
+            imageBody: document.getElementById('imageToastBody')
+          }
+        };
 
-      const saturationInput = document.getElementById('saturationRange');
-      const saturationOutput = document.getElementById('saturationRangeValue');
+        // State
+        this.state = {
+          multiplier: 1.3,
+          saturation: 50,
+          lineLength: 0.15,
+          plotSpeed: 15,
+          plotSize: 90,
+          theme: 'light',
+          isLoopRunning: false,
+          loopDirection: 'Forward',
+          strokeColor: '#000000'
+        };
 
-      const lineLengthInput = document.getElementById('lineLengthRange');
-      const lineLengthOutput = document.getElementById('lineLengthRangeValue');
+        this.animationId = null;
+        this.lastFrameTime = 0;
 
-      const plotSpeedInput = document.getElementById('plotSpeedRange');
-      const plotSpeedOutput = document.getElementById('plotSpeedRangeValue');
-
-      const plotSizeInput = document.getElementById('plotSizeRange');
-      const plotSizeOutput = document.getElementById('plotSizeRangeValue');
-
-      const btnForward = document.getElementById('forwardButton');
-      const btnBackward = document.getElementById('backwardButton');
-      const btnStop = document.getElementById('stopButton');
-      const btnCopy = document.getElementById('copyButton');
-      const btnImage = document.getElementById('imageButton');
-
-      const btnToggleTheme = document.getElementById('themeToggleButton');
-      const spanToggleThemeLight = document.getElementById('themeToggleIconLight');
-      const spanToggleThemeDark = document.getElementById('themeToggleIconDark');
-      
-      const parentDiv = document.getElementById('canvasDiv');
-      const canvas = document.getElementById("canvas");
-
-      const copyToastDiv = document.getElementById('copyToast');
-      const copyToast = new bootstrap.Toast(copyToastDiv, { autohide: true, delay: 4000 });
-      const copyToastOutput = document.getElementById('copyToastBody');
-
-      const imageToastDiv = document.getElementById('imageToast');
-      const imageToast = new bootstrap.Toast(imageToastDiv, { autohide: true, delay: 4000 });
-      const imageToastOutput = document.getElementById('imageToastBody');
-
-      // Set initial canvas settings
-      canvas.width = parentDiv.offsetWidth - 4;
-      canvas.height = parentDiv.offsetWidth * 0.945;
-      let strColorStroke = "#000000";
-
-      // Set initial values
-      let isLoopRunning = false;
-      let loopInterval;
-      let loopDirection = "Forward";
-
-      // Get url and query string
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const siteFullURL = window.location.href;
-      const siteBaseURL = siteFullURL.split(/[?#]/)[0];
-
-      // Set initial loop multiplier value
-      let dblMultiplier = 1.3;
-      if (urlParams.has('Multiplier')) {
-        let tempValue = urlParams.get('Multiplier');
-        if (!isNaN(tempValue)) {
-          if (tempValue >= 0 &&  tempValue <=20) {dblMultiplier = parseFloat(tempValue)}
-        } 
+        this.init();
       }
-      let dblMultiplierFormatted = parseFloat(dblMultiplier).toFixed(4);
-      rangeInput.value = dblMultiplier;
-      rangeOutput.textContent = 'Loop Multiplier: ' + dblMultiplierFormatted;
 
-      // Set initial saturation level value
-      let dblSaturation = 50;
-      if (urlParams.has('Saturation')) {
-        let tempValue = urlParams.get('Saturation');
-        if (!isNaN(tempValue)) {
-          if (tempValue >= 1 &&  tempValue <=360) {dblSaturation = parseFloat(tempValue)}
-        } 
+      init() {
+        this.loadFromURL();
+        this.setupEventListeners();
+        this.resizeCanvas();
+        this.updateUI();
+        this.draw();
       }
-      saturationInput.value = dblSaturation;
-      saturationOutput.textContent = 'Saturation Level: ' + saturationInput.value;
 
-      // Set initial line length value
-      let dblLineLength = 0.15;
-      if (urlParams.has('LineLength')) {
-        let tempValue = urlParams.get('LineLength');
-        if (!isNaN(tempValue)) {
-          if (tempValue >= 0.01 &&  tempValue <=3) {dblLineLength = parseFloat(tempValue)}
-        } 
+      loadFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const getParam = (name, min, max, parser = parseFloat) => {
+          if (urlParams.has(name)) {
+            const val = parser(urlParams.get(name));
+            if (!isNaN(val) && val >= min && val <= max) return val;
+          }
+          return null;
+        };
+
+        this.state.multiplier = getParam('Multiplier', 0, 20) ?? this.state.multiplier;
+        this.state.saturation = getParam('Saturation', 1, 360) ?? this.state.saturation;
+        this.state.lineLength = getParam('LineLength', 0.01, 3) ?? this.state.lineLength;
+        this.state.plotSpeed = getParam('PlotSpeed', 1, 20) ?? this.state.plotSpeed;
+        this.state.plotSize = getParam('PlotSize', 10, 100) ?? this.state.plotSize;
+
+        if (urlParams.has('Theme')) {
+          const theme = urlParams.get('Theme').toLowerCase();
+          if (theme === 'dark' || theme === 'light') {
+            this.state.theme = theme;
+          }
+        }
+
+        this.applyTheme();
       }
-      let dblLineLengthFormatted = parseFloat(dblLineLength).toFixed(3);
-      lineLengthInput.value = dblLineLengthFormatted;
-      lineLengthOutput.textContent = 'Line Length: ' + dblLineLengthFormatted;
 
-      // Set initial plot speed value
-      let dblPlotSpeed = 15;
-      if (urlParams.has('PlotSpeed')) {
-        let tempValue = urlParams.get('PlotSpeed');
-        if (!isNaN(tempValue)) {
-          if (tempValue >= 1 &&  tempValue <=20) {dblPlotSpeed = parseFloat(tempValue)}
-        } 
+      applyTheme() {
+        document.documentElement.setAttribute('data-bs-theme', this.state.theme);
+        if (this.state.theme === 'light') {
+          this.ui.themeIcons.light.style.display = 'block';
+          this.ui.themeIcons.dark.style.display = 'none';
+          this.state.strokeColor = "#000000";
+        } else {
+          this.ui.themeIcons.light.style.display = 'none';
+          this.ui.themeIcons.dark.style.display = 'block';
+          this.state.strokeColor = "#FFFFFF";
+        }
       }
-      plotSpeedInput.value = dblPlotSpeed;
-      plotSpeedOutput.textContent = 'Plot Speed: ' + plotSpeedInput.value;
 
-       // Set initial plot size value
-      let dblPlotSize = 100;
-      if (urlParams.has('PlotSize')) {
-        let tempValue = urlParams.get('PlotSize');
-        if (!isNaN(tempValue)) {
-          if (tempValue >= 10 &&  tempValue <=100) {dblPlotSize = parseFloat(tempValue)}
-        } 
+      setupEventListeners() {
+        // Range Inputs
+        this.ui.multiplier.input.addEventListener('input', (e) => this.handleInput('multiplier', e.target.value));
+        this.ui.saturation.input.addEventListener('input', (e) => this.handleInput('saturation', e.target.value));
+        this.ui.lineLength.input.addEventListener('input', (e) => this.handleInput('lineLength', e.target.value));
+        this.ui.plotSize.input.addEventListener('input', (e) => this.handleInput('plotSize', e.target.value));
+        this.ui.plotSpeed.input.addEventListener('input', (e) => {
+          this.state.plotSpeed = parseFloat(e.target.value);
+          this.updateUI(); // Update label
+        });
+
+        // Buttons
+        this.ui.buttons.forward.addEventListener('click', () => this.toggleLoop('Forward'));
+        this.ui.buttons.backward.addEventListener('click', () => this.toggleLoop('Backward'));
+        this.ui.buttons.stop.addEventListener('click', () => this.stopLoop());
+        this.ui.buttons.theme.addEventListener('click', () => this.toggleTheme());
+        this.ui.buttons.copy.addEventListener('click', () => this.copyToClipboard());
+        this.ui.buttons.image.addEventListener('click', () => this.saveImage());
+
+        // Window
+        window.addEventListener('resize', () => {
+          this.resizeCanvas();
+          this.draw();
+        });
       }
-      plotSizeInput.value = dblPlotSize;
-      plotSizeOutput.textContent = 'Plot Size: ' + plotSizeInput.value;
 
-      // Set initial theme based on system preference
-      let strThemePreference = "light";
+      handleInput(key, value) {
+        this.state[key] = parseFloat(value);
+        this.updateUI();
+        if (!this.state.isLoopRunning) {
+          this.draw();
+        }
+      }
 
-      if (urlParams.has('Theme')) {
-        let tempValue = urlParams.get('Theme').toLowerCase();
-        if (tempValue === "light") {
-          document.documentElement.setAttribute('data-bs-theme', 'light');
-          spanToggleThemeLight.style.display = 'block';
-          spanToggleThemeDark.style.display = 'none';
-          strColorStroke = "#000000";
-          strThemePreference = "light";
+      updateUI() {
+        // Update Range Inputs and Labels
+        this.ui.multiplier.input.value = this.state.multiplier;
+        this.ui.multiplier.output.textContent = 'Loop Multiplier: ' + this.state.multiplier.toFixed(4);
+
+        this.ui.saturation.input.value = this.state.saturation;
+        this.ui.saturation.output.textContent = 'Saturation Level: ' + this.state.saturation;
+
+        this.ui.lineLength.input.value = this.state.lineLength.toFixed(3); // Input expects string for precision sometimes
+        this.ui.lineLength.output.textContent = 'Line Length: ' + this.state.lineLength.toFixed(3);
+
+        this.ui.plotSize.input.value = this.state.plotSize;
+        this.ui.plotSize.output.textContent = 'Plot Size: ' + this.state.plotSize.toFixed(0);
+
+        this.ui.plotSpeed.input.value = this.state.plotSpeed;
+        this.ui.plotSpeed.output.textContent = 'Plot Speed: ' + this.state.plotSpeed;
+
+        // Update Button States
+        this.ui.buttons.forward.classList.toggle('active', this.state.isLoopRunning && this.state.loopDirection === 'Forward');
+        this.ui.buttons.backward.classList.toggle('active', this.state.isLoopRunning && this.state.loopDirection === 'Backward');
+        this.ui.buttons.stop.classList.toggle('active', !this.state.isLoopRunning);
+      }
+
+      resizeCanvas() {
+        this.ui.canvas.width = this.ui.canvasDiv.offsetWidth - 4;
+        this.ui.canvas.height = this.ui.canvasDiv.offsetWidth * 0.945;
+      }
+
+      toggleTheme() {
+        this.state.theme = this.state.theme === 'light' ? 'dark' : 'light';
+        this.applyTheme();
+        this.draw();
+      }
+
+      toggleLoop(direction) {
+        if (this.state.isLoopRunning && this.state.loopDirection === direction) {
+          this.stopLoop();
         } else {
-          document.documentElement.setAttribute('data-bs-theme', 'dark');
-          spanToggleThemeLight.style.display = 'none';
-          spanToggleThemeDark.style.display = 'block';
-          strColorStroke = "#FFFFFF";
-          strThemePreference = "dark";
+          this.state.loopDirection = direction;
+          if (!this.state.isLoopRunning) {
+            this.state.isLoopRunning = true;
+            this.lastFrameTime = performance.now();
+            this.loop();
+          }
+          this.updateUI();
         }
-      };
+      }
 
-      // Add loop multiplier listener
-      rangeInput.addEventListener('input', function() {
-        rangeOutput.textContent = 'Loop Multiplier: ' + parseFloat(this.value).toFixed(4);
-        if (isLoopRunning) {
-          loopCycle();
-        } else {
-          let dblMultiplier = parseFloat(this.value);
-          let dblSaturation = parseFloat(saturationInput.value);
-          let dblLineLength = parseFloat(lineLengthInput.value);
-          let dblPlotSize = parseFloat(plotSizeInput.value);
-          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
+      stopLoop() {
+        this.state.isLoopRunning = false;
+        if (this.animationId) {
+          cancelAnimationFrame(this.animationId);
+          this.animationId = null;
         }
-      });
+        this.updateUI();
+      }
 
-      // Add saturation level listener
-      saturationInput.addEventListener('input', function() {
-        saturationOutput.textContent = 'Saturation Level: ' + this.value;
-        if (isLoopRunning) {
-          loopCycle();
-        } else {
-          let dblMultiplier = parseFloat(rangeInput.value);
-          let dblSaturation = parseFloat(this.value);
-          let dblLineLength = parseFloat(lineLengthInput.value);
-          let dblPlotSize = parseFloat(plotSizeInput.value);
-          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
-        }
-      });
+      loop(timestamp) {
+        if (!this.state.isLoopRunning) return;
 
-      // Add line length listener
-      lineLengthInput.addEventListener('input', function() {
-        lineLengthOutput.textContent = 'Line Length: ' + parseFloat(this.value).toFixed(3);
-        if (isLoopRunning) {
-          loopCycle();
-        } else {
-          let dblMultiplier = parseFloat(rangeInput.value);
-          let dblSaturation = parseFloat(saturationInput.value);
-          let dblLineLength = parseFloat(this.value);
-          let dblPlotSize = parseFloat(plotSizeInput.value);
-          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
-        }
-      });
+        const delay = Math.max(20 - this.state.plotSpeed, 1);
 
-      // Add plot size listener
-      plotSizeInput.addEventListener('input', function() {
-        plotSizeOutput.textContent = 'Plot Size: ' + parseFloat(this.value).toFixed(0);
-        if (isLoopRunning) {
-          loopCycle();
-        } else {
-          let dblMultiplier = parseFloat(rangeInput.value);
-          let dblSaturation = parseFloat(saturationInput.value);
-          let dblLineLength = parseFloat(lineLengthInput.value);
-          let dblPlotSize = parseFloat(this.value);
-          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
-        }
-      });
+        if (!this.lastFrameTime) this.lastFrameTime = timestamp;
+        const elapsed = timestamp - this.lastFrameTime;
 
-      // Add plot speed listener
-      plotSpeedInput.addEventListener('input', function() {
-        plotSpeedOutput.textContent = 'Plot Speed: ' + this.value;
-        if (isLoopRunning) {
-          loopCycle();
-        }
-      });
+        if (elapsed >= delay) {
+          const increment = this.state.loopDirection === 'Forward' ? 0.0001 : -0.0001;
+          this.state.multiplier += increment;
 
-      // Define actions when forward button clicked
-      btnForward.addEventListener('click', () => {
-        if (isLoopRunning && loopDirection == "Forward") {
-          btnForward.classList.remove('active');
-          btnBackward.classList.remove('active');
-          btnStop.classList.remove('active');
-          clearInterval(loopInterval);
-          isLoopRunning = false;
-        } else {
-          btnForward.classList.add('active');
-          btnBackward.classList.remove('active');
-          btnStop.classList.remove('active');
-          loopDirection = "Forward";
-          loopCycle();
-        }
-      });
+          // Boundary checks
+          if (this.state.loopDirection === 'Forward' && this.state.multiplier > 20) {
+            this.state.multiplier = 0;
+          } else if (this.state.loopDirection === 'Backward' && this.state.multiplier <= 0) {
+            this.state.multiplier = 20;
+          }
 
-      // Define actions when backward button clicked
-      btnBackward.addEventListener('click', () => {
-        if (isLoopRunning && loopDirection == "Backward") {
-          btnForward.classList.remove('active');
-          btnBackward.classList.remove('active');
-          btnStop.classList.remove('active');
-          clearInterval(loopInterval);
-          isLoopRunning = false;
-        } else {      
-          btnForward.classList.remove('active');
-          btnBackward.classList.add('active');
-          btnStop.classList.remove('active');
-          loopDirection = "Backward";
-          loopCycle();
-        }
-      });
-
-      // Define actions when stop button clicked
-      btnStop.addEventListener('click', () => {
-        btnForward.classList.remove('active');
-        btnBackward.classList.remove('active');
-        btnStop.classList.remove('active');
-        if (isLoopRunning) {
-          clearInterval(loopInterval);
-          isLoopRunning = false;
-        }
-      });
-
-      // Define actions when copy button clicked
-      btnCopy.addEventListener('click', async () => {
-
-        let dblMultiplier = parseFloat(rangeInput.value);
-        let dblSaturation = parseFloat(saturationInput.value);
-        let dblLineLength = parseFloat(lineLengthInput.value);
-        let dblPlotSpeed = parseFloat(plotSpeedInput.value);
-        let dblPlotSize = parseFloat(plotSizeInput.value);
-
-        let shareURL = siteBaseURL + "?Multiplier=" + encodeURIComponent(dblMultiplier) +
-          "&Saturation=" + encodeURIComponent(dblSaturation) + "&LineLength=" + encodeURIComponent(dblLineLength) +
-          "&PlotSpeed=" + encodeURIComponent(dblPlotSpeed) + "&PlotSize=" + encodeURIComponent(dblPlotSize) +
-          "&Theme=" + encodeURIComponent(strThemePreference);
-
-        let shareDescription = "URL with plot settings copied to the clipboard:\n" +
-          "Loop Multiplier: " + dblMultiplier + "\n" +
-          "Saturation Level: " + dblSaturation + "\n" +
-          "Line Length: " + dblLineLength + "\n" +
-          "Plot Speed: " + dblPlotSpeed + "\n" +
-          "Plot Size: " + dblPlotSize + "\n" +
-          "Theme: " + strThemePreference;
-
-        try {
-          await navigator.clipboard.writeText(shareURL);
-        } catch (err) {
-          console.error('Failed to copy url and plot settings: ', err);
+          this.updateUI();
+          this.draw();
+          this.lastFrameTime = timestamp;
         }
 
-        copyToastOutput.textContent = shareDescription;
-        copyToast.show();
+        this.animationId = requestAnimationFrame((t) => this.loop(t));
+      }
 
-      });
+      draw() {
+        const ctx = this.ui.canvas.getContext("2d");
+        if (!ctx) return;
 
-      // Define actions when image button clicked
-      btnImage.addEventListener('click', async () => {
-        try {
-          const blob = await new Promise(resolve => {
-            canvas.toBlob(resolve, 'image/png');
-          });
-          const clipboardItem = new ClipboardItem({ [blob.type]: blob });
-          await navigator.clipboard.write([clipboardItem]);
-        } catch (error) {
-          console.error('Failed to copy canvas image:', error);
-        }
-        imageToastOutput.textContent = "Image copied to the clipboard.";
-        imageToast.show();
-      });
+        const width = this.ui.canvas.width;
+        const height = this.ui.canvas.height;
+        const radiusScale = width * 0.925 * (this.state.plotSize / 100);
+        const center = width / 2;
 
-      // Add window resize listener
-      window.addEventListener('resize', function() {
-        canvas.width = parentDiv.offsetWidth - 4;
-        canvas.height = parentDiv.offsetWidth * 0.945;
-        if (isLoopRunning) {
-          loopCycle();
-        } else {
-          let dblMultiplier = parseFloat(rangeInput.value);
-          let dblSaturation = parseFloat(saturationInput.value);
-          let dblLineLength = parseFloat(lineLengthInput.value);
-          let dblPlotSize = parseFloat(plotSizeInput.value);
-          draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
-        }
-      });
+        ctx.clearRect(0, 0, width, height);
+        ctx.strokeStyle = this.state.strokeColor;
+        ctx.beginPath(); // Batch all lines into one path for performance
 
-      // Draw initial chart on page load
-      document.addEventListener('DOMContentLoaded', function() {
-        let dblMultiplier = parseFloat(rangeInput.value);
-        let dblSaturation = parseFloat(saturationInput.value);
-        let dblLineLength = parseFloat(lineLengthInput.value);
-        let dblPlotSize = parseFloat(plotSizeInput.value);
-        draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
-      });
+        let firstPoint = true;
 
-      // Toggle between light and dark themes
-      btnToggleTheme.addEventListener('click', () => {
-        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
-          document.documentElement.setAttribute('data-bs-theme', 'light');
-          spanToggleThemeLight.style.display = 'block';
-          spanToggleThemeDark.style.display = 'none';
-          strColorStroke = "#000000";
-          strThemePreference = "light";
-        } else {
-          document.documentElement.setAttribute('data-bs-theme', 'dark');
-          spanToggleThemeLight.style.display = 'none';
-          spanToggleThemeDark.style.display = 'block';
-          strColorStroke = "#FFFFFF";
-          strThemePreference = "dark";
-        }
-        let dblMultiplier = parseFloat(rangeInput.value);
-        let dblSaturation = parseFloat(saturationInput.value);
-        let dblLineLength = parseFloat(lineLengthInput.value);
-        let dblPlotSize = parseFloat(plotSizeInput.value);
-        draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
-      });
+        for (let i = this.state.lineLength; i <= this.state.saturation; i += this.state.lineLength) {
+          const radius = radiusScale * Math.cos(this.state.multiplier * i);
+          const x = (((radius * Math.sin(i)) / Math.PI) * 1.55) + center;
+          const y = ((radius * Math.cos(i)) / 2) + (center * 0.95);
 
-      // Define function to cycle through chart plots
-      function loopCycle() {
-
-        if (isLoopRunning) {
-
-          clearInterval(loopInterval);
-          isLoopRunning = false;
-
-        }
-
-        if (!isLoopRunning) {
-          
-          isLoopRunning = true;
-          let count = 0;
-
-          let dblIncrement;
-          if (loopDirection == "Forward") { 
-            dblIncrement = 0.0001;
+          if (firstPoint) {
+            ctx.moveTo(x, y);
+            firstPoint = false;
           } else {
-            dblIncrement = -0.0001;
+            ctx.lineTo(x, y);
           }
+        }
 
-          let dblMultiplier = parseFloat(rangeInput.value);
-          let dblSaturation = parseFloat(saturationInput.value);
-          let dblLineLength = parseFloat(lineLengthInput.value);
-          let dblPlotSpeed = 20 - parseFloat(plotSpeedInput.value);
-          let dblPlotSize = parseFloat(plotSizeInput.value);
+        ctx.stroke();
+      }
 
-          loopInterval = setInterval(() => {
+      async copyToClipboard() {
+        const params = new URLSearchParams({
+          Multiplier: this.state.multiplier,
+          Saturation: this.state.saturation,
+          LineLength: this.state.lineLength,
+          PlotSpeed: this.state.plotSpeed,
+          PlotSize: this.state.plotSize,
+          Theme: this.state.theme
+        });
 
-            dblMultiplier = dblMultiplier + dblIncrement;
+        const shareURL = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+        const description = `URL with plot settings copied to the clipboard:\n` +
+          `Loop Multiplier: ${this.state.multiplier}\n` +
+          `Saturation Level: ${this.state.saturation}\n` +
+          `Line Length: ${this.state.lineLength}\n` +
+          `Plot Speed: ${this.state.plotSpeed}\n` +
+          `Plot Size: ${this.state.plotSize}\n` +
+          `Theme: ${this.state.theme}`;
 
-            if (loopDirection == 'Forward') { 
-              if (dblMultiplier > 20) {dblMultiplier = 0};
-            } else {
-              if (dblMultiplier <= 0) {dblMultiplier = 20};
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareURL);
+          } else {
+            // Fallback for non-secure contexts
+            const textArea = document.createElement("textarea");
+            textArea.value = shareURL;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+              document.execCommand('copy');
+            } catch (err) {
+              console.error('Fallback: Oops, unable to copy', err);
             }
-
-            let dblMultiplierFormatted = dblMultiplier.toFixed(4);
-            rangeInput.value = dblMultiplierFormatted;
-            rangeOutput.textContent = 'Loop Multiplier: ' + dblMultiplierFormatted;
-
-            draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke);
-
-          }, Math.max(dblPlotSpeed, 1));
-
+            document.body.removeChild(textArea);
+          }
+          this.ui.toasts.copyBody.textContent = description;
+          this.ui.toasts.copy.show();
+        } catch (err) {
+          console.error('Failed to copy URL:', err);
         }
+      }
 
-      };
+      async saveImage() {
+        try {
+          const blob = await new Promise(resolve => this.ui.canvas.toBlob(resolve, 'image/png'));
 
-      /**
-        * Draws the spiral plot on the canvas.
-        * @param {number} dblMultiplier - The loop multiplier affecting the spiral's shape.
-        * @param {number} dblSaturation - The maximum saturation/angle for plotting.
-        * @param {number} dblLineLength - The step size for each line segment.
-        * @param {number} dblPlotSize - The size of the plot within the canvas.
-        * @param {string} strColorStroke - The stroke color for the plot lines.
-      */
-      function draw(dblMultiplier, dblSaturation, dblLineLength, dblPlotSize, strColorStroke) {
-
-        if (canvas.getContext) {
-
-          const plotArea = canvas.getContext("2d");
-          const plotAreaWidth = canvas.width;
-          const plotAreaHeight = canvas.height;
-
-          const radiusScale = plotAreaWidth * 0.925 * (dblPlotSize / 100);
-          const plotAreaCenter = (plotAreaWidth/2);
-
-          plotArea.clearRect(0, 0, plotAreaWidth, plotAreaHeight);
-          plotArea.strokeStyle = strColorStroke;
-          let x1 = 0;
-          let y1 = 0;
-          let dblRadius, x2, y2;
-
-          for (let dblSaturationCurrent = dblLineLength; dblSaturationCurrent <= dblSaturation; 
-            dblSaturationCurrent = dblSaturationCurrent + dblLineLength) {
-
-            dblRadius = radiusScale * Math.cos(dblMultiplier*dblSaturationCurrent);
-            x2 = (((dblRadius * Math.sin(dblSaturationCurrent))/Math.PI)*1.55) + plotAreaCenter;
-            y2 = ((dblRadius * Math.cos(dblSaturationCurrent))/2) + (plotAreaCenter*0.95);
-
-            if (x1 == 0) {
-              x1 = x2;
-              y1 = y2;
-            };
-      
-            plotArea.beginPath();  
-            plotArea.moveTo(x1,y1);
-            plotArea.lineTo(x2,y2);
-            plotArea.stroke();
-            plotArea.closePath();
-
-            x1=x2;
-            y1=y2;
-
+          if (navigator.clipboard && navigator.clipboard.write && window.ClipboardItem) {
+            try {
+              const clipboardItem = new ClipboardItem({ [blob.type]: blob });
+              await navigator.clipboard.write([clipboardItem]);
+              this.ui.toasts.imageBody.textContent = "Image copied to the clipboard.";
+              this.ui.toasts.image.show();
+              return;
+            } catch (err) {
+              console.warn("Clipboard write failed, falling back to download.", err);
+            }
           }
 
+          // Fallback: Download image
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'spirograph.png';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          this.ui.toasts.imageBody.textContent = "Image downloaded (Clipboard unavailable).";
+          this.ui.toasts.image.show();
+
+        } catch (error) {
+          console.error('Failed to save image:', error);
         }
+      }
+    }
 
-      };
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      window.spiroGraph = new SpiroGraph();
+    });
 
-      // Original Commodore 64 Code from 1982 (required SuperExpander Cartridge)
-      // 1 graphic 2 : b = 0.1
-      // 10 c = 511 : d = 511
-      // 20 for a=0 to 1000 step b
-      // 30 r = 100 * cos (4*a)
-      // 40 x = (r * sin(a))/3.14
-      // 50 y = (r * cos(a))/2
-      // 60 get a$ : if a$ > "" then 110
-      // 70 x = x + 511 : y = y + 511
-      // 80 draw 1,c,d to x,y
-      // 90 d = y : c = x
-      // 100 next a
-      // 110 a = 1000
-      // 120 b = b + .1
-      // 130 scnclr
-      // 140 goto 10
+  </script>
+</body>
 
-      // Loop Multiplier Notes:
-      // 0 = full circle
-      // 1 = one loop
-      // 2 = 4 loops
-      // 3 = 3 loops
-      // 4 = 8 loops
-      // etc
-
-    </script>
-  </body>
 </html>
