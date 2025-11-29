@@ -103,6 +103,8 @@
                       class="fa-classic fa-solid fa-copy"></i></span></button>
                 <button id="imageButton" class="col-2 btn btn-outline-primary text-nowrap"><span><i
                       class="fa-classic fa-solid fa-camera"></i></span></button>
+                <button id="recordButton" class="col-2 btn btn-outline-danger text-nowrap"><span><i
+                      class="fa-classic fa-solid fa-video"></i></span></button>
               </div>
             </div>
           </div>
@@ -161,6 +163,7 @@
             stop: document.getElementById('stopButton'),
             copy: document.getElementById('copyButton'),
             image: document.getElementById('imageButton'),
+            record: document.getElementById('recordButton'),
             theme: document.getElementById('themeToggleButton')
           },
           themeIcons: {
@@ -187,11 +190,15 @@
           theme: 'light',
           isLoopRunning: false,
           loopDirection: 'Forward',
-          strokeColor: '#000000'
+          strokeColor: '#000000',
+          isRecording: false
         };
 
         this.animationId = null;
         this.lastFrameTime = 0;
+        this.mediaRecorder = null;
+        this.recordedChunks = [];
+        this.recordingTimeout = null;
 
         this.init();
       }
@@ -262,6 +269,7 @@
         this.ui.buttons.theme.addEventListener('click', () => this.toggleTheme());
         this.ui.buttons.copy.addEventListener('click', () => this.copyToClipboard());
         this.ui.buttons.image.addEventListener('click', () => this.saveImage());
+        this.ui.buttons.record.addEventListener('click', () => this.toggleRecording());
 
         // Window
         window.addEventListener('resize', () => {
@@ -301,6 +309,19 @@
         this.ui.buttons.stop.classList.toggle('active', !this.state.isLoopRunning);
       }
 
+      updateRecordButton() {
+        // Recording Button State
+        if (this.state.isRecording) {
+          this.ui.buttons.record.classList.add('btn-danger');
+          this.ui.buttons.record.classList.remove('btn-outline-danger');
+          this.ui.buttons.record.innerHTML = '<span><i class="fa-classic fa-solid fa-stop"></i></span>';
+        } else {
+          this.ui.buttons.record.classList.remove('btn-danger');
+          this.ui.buttons.record.classList.add('btn-outline-danger');
+          this.ui.buttons.record.innerHTML = '<span><i class="fa-classic fa-solid fa-video"></i></span>';
+        }
+      }
+
       resizeCanvas() {
         this.ui.canvas.width = this.ui.canvasDiv.offsetWidth - 4;
         this.ui.canvas.height = this.ui.canvasDiv.offsetWidth * 0.945;
@@ -333,6 +354,90 @@
           this.animationId = null;
         }
         this.updateUI();
+      }
+
+      toggleRecording() {
+        if (this.state.isRecording) {
+          this.stopRecording();
+        } else {
+          this.startRecording();
+        }
+      }
+
+      startRecording() {
+        try {
+          const stream = this.ui.canvas.captureStream(30); // 30 FPS
+
+          let mimeType = 'video/webm';
+          if (!MediaRecorder.isTypeSupported(mimeType)) {
+            console.warn(`${mimeType} is not supported, trying video/mp4`);
+            mimeType = 'video/mp4';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+              console.error('No supported video mime type found');
+              alert('Video recording is not supported in this browser.');
+              return;
+            }
+          }
+
+          this.mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
+          this.recordedChunks = [];
+
+          this.mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              this.recordedChunks.push(event.data);
+            }
+          };
+
+          this.mediaRecorder.onstop = () => {
+            this.downloadVideo(mimeType);
+          };
+
+          this.mediaRecorder.start();
+          this.state.isRecording = true;
+          this.updateRecordButton();
+
+          // Auto-stop after 5 minutes (300,000 ms)
+          this.recordingTimeout = setTimeout(() => {
+            if (this.state.isRecording) {
+              this.stopRecording();
+              alert("Recording stopped automatically after 5 minutes.");
+            }
+          }, 300000);
+
+        } catch (err) {
+          console.error("Error starting recording:", err);
+          this.state.isRecording = false;
+          this.updateRecordButton();
+          alert("Failed to start recording. See console for details.");
+        }
+      }
+
+      stopRecording() {
+        if (this.mediaRecorder && this.state.isRecording) {
+          this.mediaRecorder.stop();
+          this.state.isRecording = false;
+          this.updateRecordButton();
+
+          if (this.recordingTimeout) {
+            clearTimeout(this.recordingTimeout);
+            this.recordingTimeout = null;
+          }
+        }
+      }
+
+      downloadVideo(mimeType) {
+        const blob = new Blob(this.recordedChunks, { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // Extension based on mimeType
+        const ext = mimeType.split('/')[1] || 'webm';
+        a.download = `spirograph-recording.${ext}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
       }
 
       loop(timestamp) {
@@ -371,7 +476,10 @@
         const radiusScale = width * 0.925 * (this.state.plotSize / 100);
         const center = width / 2;
 
-        ctx.clearRect(0, 0, width, height);
+        // Fill background to prevent blank video
+        ctx.fillStyle = this.state.theme === 'light' ? '#ffffff' : '#212529'; // Bootstrap dark body color
+        ctx.fillRect(0, 0, width, height);
+
         ctx.strokeStyle = this.state.strokeColor;
         ctx.beginPath(); // Batch all lines into one path for performance
 
